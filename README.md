@@ -1,6 +1,6 @@
-# Add SecureToken to Logged-In User
+# Add SecureToken to Target User
 
-This script adds a SecureToken to the current logged-in user to prepare the Mac for enabling FileVault. Prompts for password of SecureToken admin (gets SecureToken Admin Username from Jamf Pro script parameter) and logged-in user.
+This script adds a SecureToken to the target local user to prepare the Mac for enabling FileVault. Prompts for password of SecureToken admin (gets SecureToken Admin Username from Jamf Pro script parameter) and target user.
 
 This workflow is required to authorize programmatically-created user accounts (that were not already explicitly given a SecureToken) to enable or use FileVault and unlock disk encryption on APFS-formatted startup volumes.
 
