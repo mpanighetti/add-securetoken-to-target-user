@@ -41,12 +41,12 @@
 
 
 
-# Jamf Pro script parameter: "SecureToken Admin Username"
-# A local administrator account with SecureToken access.
-secureTokenAdmin="${4}"
 # Jamf Pro script parameter: "Target Username"
 # (optional) A local user account requiring SecureToken. If undefined, script will default to the logged-in user as the target.
-targetUsername="${5}"
+targetUsername="${4}"
+# Jamf Pro script parameter: "SecureToken Admin Username"
+# A local administrator account with SecureToken access.
+secureTokenAdmin="${5}"
 macOSVersionMajor=$(/usr/bin/sw_vers -productVersion | /usr/bin/awk -F . '{print $1}')
 macOSVersionMinor=$(/usr/bin/sw_vers -productVersion | /usr/bin/awk -F . '{print $2}')
 macOSVersionBuild=$(/usr/bin/sw_vers -productVersion | /usr/bin/awk -F . '{print $3}')
@@ -106,6 +106,11 @@ check_target_username () {
     else
       targetUsername="$loggedInUser"
     fi
+  elif id -u "$targetUsername"; then 
+    echo "Confirmed target user exists on this Mac."
+  else 
+    echo "❌ ERROR: User not found on this Mac, unable to proceed: ${targetUsername}"
+    exit 1
   fi
   echo "Target Username: ${targetUsername}"
 
@@ -116,7 +121,7 @@ check_target_username () {
 check_securetoken_target_user () {
 
   if /usr/sbin/sysadminctl -secureTokenStatus "$targetUsername" 2>&1 | /usr/bin/grep -q "ENABLED"; then
-    echo "${targetUsername} already has a SecureToken. No action required."
+    echo "${targetUsername} already has a SecureToken, no action required."
     exit 0
   fi
   
